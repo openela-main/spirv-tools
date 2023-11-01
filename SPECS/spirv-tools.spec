@@ -1,24 +1,21 @@
-%global sdkver 1.3.239.0
+#global commit 26a698c34788bb69123a1f3789970a16cf4d9641
+#global shortcommit %%(c=%{commit}; echo ${c:0:7})
+#global commit_date 20180407
+#global gitrel .%%{commit_date}.git%%{shortcommit}
 
 Name:           spirv-tools
-Version:        2023.1
-Release:        2%{?dist}
+Version:        2018.4
+Release:        1%{?dist}
 Summary:        API and commands for processing SPIR-V modules
 
 License:        ASL 2.0
 URL:            https://github.com/KhronosGroup/SPIRV-Tools
-Source0:        %url/archive/sdk-%{sdkver}.tar.gz#/SPIRV-Tools-sdk-%{sdkver}.tar.gz
+Source0:        %url/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
-Patch0:         0001-opt-fix-spirv-ABI-on-Linux-again.patch
-
-BuildRequires:  cmake
+BuildRequires:  cmake3
 BuildRequires:  gcc-c++
 BuildRequires:  ninja-build
-%if 0%{?rhel} == 7
-BuildRequires:  python36-devel
-%else
 BuildRequires:  python3-devel
-%endif
 BuildRequires:  python3-rpm-macros
 BuildRequires:  spirv-headers-devel
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
@@ -42,16 +39,15 @@ Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 Development files for %{name}
 
 %prep
-%autosetup -p1 -n SPIRV-Tools-sdk-%{sdkver}
+%autosetup -p1 -n SPIRV-Tools-%{version}
 
 %build
 %__mkdir_p %_target_platform
 pushd %_target_platform
-%cmake -DCMAKE_BUILD_TYPE=Release \
+%cmake3 -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_LIBDIR=%{_lib} \
         -DSPIRV-Headers_SOURCE_DIR=%{_prefix} \
         -DPYTHON_EXECUTABLE=%{__python3} \
-        -DSPIRV_TOOLS_BUILD_STATIC=OFF \
         -GNinja ..
 %ninja_build
 popd
@@ -69,64 +65,22 @@ popd
 %{_bindir}/spirv-dis
 %{_bindir}/spirv-lesspipe.sh
 %{_bindir}/spirv-link
-%{_bindir}/spirv-lint
 %{_bindir}/spirv-opt
-%{_bindir}/spirv-reduce
+%{_bindir}/spirv-stats
 %{_bindir}/spirv-val
 
 %files libs
-%{_libdir}/libSPIRV-Tools-diff.so
 %{_libdir}/libSPIRV-Tools-link.so
-%{_libdir}/libSPIRV-Tools-lint.so
 %{_libdir}/libSPIRV-Tools-opt.so
 %{_libdir}/libSPIRV-Tools-shared.so
-%{_libdir}/libSPIRV-Tools-reduce.so
 %{_libdir}/libSPIRV-Tools.so
 
 %files devel
 %{_includedir}/spirv-tools/
-%{_libdir}/cmake/*
 %{_libdir}/pkgconfig/SPIRV-Tools-shared.pc
 %{_libdir}/pkgconfig/SPIRV-Tools.pc
 
 %changelog
-* Wed Feb 15 2023 Dave Airlie <airlied@redhat.com> - 2023.1-2
-- fix spirv-tools ABI break
-
-* Mon Feb 13 2023 Dave Airlie <airlied@redhat.com> - 2023.1-1
-- Update to 1.3.239.0 SDK version
-
-* Wed Aug 24 2022 Dave Airlie <airlied@redhat.com> - 2022.2-2
-- Update to 1.3.224.0 SDK version
-
-* Mon Jun 20 2022 Dave Airlie <airlied@redhat.com> - 2022.2-1
-- Update to 1.3.216.0 SDK version
-
-* Mon Feb 21 2022 Dave Airlie <airlied@redhat.com> - 2022.1-1
-- Update to 1.3.204.0 SDK version
-
-* Thu Jan 28 2021 Dave Airlie <airlied@redhat.com> - 2020.5-3
-- Update to 1.2.162.0 SDK version
-
-* Wed Aug 05 2020 Dave Airlie <airlied@redhat.com> - 2020.5-1
-- update to latest upstream
-
-* Wed Jan 29 2020 Dave Airlie <airlied@redhat.com> - 2019.5-1
-- update to latest upstream
-
-* Sat Dec 07 2019 Dave Airlie <airlied@redhat.com> - 2019.4-2
-- rebuild for 8.2.0
-
-* Tue Nov 12 2019 Dave Airlie <airlied@redhat.com> - 2019.4-1
-- latest upstream snapshot
-
-* Sun Aug 04 2019 Dave Airlie <airlied@redhat.com> - 2019.4-0.1
-- Update to latest upstream for glslang
-- drop spirv-stats as per upstream.
-
-* Thu Mar 07 2019 Dave Airlie <airlied@redhat.com> - 2019.1-1
-- Update to 2019.1 release
-
 * Mon Jul 23 2018 Leigh Scott <leigh123linux@googlemail.com> - 2018.4-1
 - Update to 2018.4 release
 
