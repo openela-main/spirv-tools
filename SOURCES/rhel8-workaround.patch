@@ -1,0 +1,13 @@
+diff -up SPIRV-Tools-sdk-1.3.250.1/CMakeLists.txt.dma SPIRV-Tools-sdk-1.3.250.1/CMakeLists.txt
+diff -up SPIRV-Tools-sdk-1.3.250.1/tools/CMakeLists.txt.dma SPIRV-Tools-sdk-1.3.250.1/tools/CMakeLists.txt
+--- SPIRV-Tools-sdk-1.3.250.1/tools/CMakeLists.txt.dma	2023-07-12 15:03:54.303896734 +1000
++++ SPIRV-Tools-sdk-1.3.250.1/tools/CMakeLists.txt	2023-07-12 15:05:46.480030301 +1000
+@@ -74,7 +74,7 @@ if (NOT ${SPIRV_SKIP_EXECUTABLES})
+                            objdump/extract_source.cpp
+                            util/cli_consumer.cpp
+                            ${COMMON_TOOLS_SRCS}
+-                      LIBS ${SPIRV_TOOLS_FULL_VISIBILITY})
++                      LIBS ${SPIRV_TOOLS_FULL_VISIBILITY} stdc++fs)
+     target_include_directories(spirv-objdump PRIVATE ${spirv-tools_SOURCE_DIR}
+                                                      ${SPIRV_HEADER_INCLUDE_DIR})
+     set(SPIRV_INSTALL_TARGETS ${SPIRV_INSTALL_TARGETS} spirv-objdump)
