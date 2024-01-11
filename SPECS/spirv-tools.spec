@@ -1,15 +1,15 @@
-%global sdkver 1.3.239.0
+%global sdkver 1.3.250.1
 
 Name:           spirv-tools
 Version:        2023.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        API and commands for processing SPIR-V modules
 
 License:        ASL 2.0
 URL:            https://github.com/KhronosGroup/SPIRV-Tools
 Source0:        %url/archive/sdk-%{sdkver}.tar.gz#/SPIRV-Tools-sdk-%{sdkver}.tar.gz
 
-Patch0:         0001-opt-fix-spirv-ABI-on-Linux-again.patch
+Patch0: rhel8-workaround.patch
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -70,6 +70,7 @@ popd
 %{_bindir}/spirv-lesspipe.sh
 %{_bindir}/spirv-link
 %{_bindir}/spirv-lint
+%{_bindir}/spirv-objdump
 %{_bindir}/spirv-opt
 %{_bindir}/spirv-reduce
 %{_bindir}/spirv-val
@@ -90,6 +91,9 @@ popd
 %{_libdir}/pkgconfig/SPIRV-Tools.pc
 
 %changelog
+* Wed Jul 12 2023 Dave Airlie <airlied@redhat.com> - 2023.1-3
+- Update to 1.3.250.1 SDK version
+
 * Wed Feb 15 2023 Dave Airlie <airlied@redhat.com> - 2023.1-2
 - fix spirv-tools ABI break
 
