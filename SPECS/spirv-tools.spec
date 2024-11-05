@@ -1,17 +1,20 @@
-%global sdkver 1.3.250.1
+%undefine __cmake_in_source_build
+
+%global sdkver 1.3.283.0
 
 Name:           spirv-tools
-Version:        2023.1
-Release:        3%{?dist}
+Version:        2024.2
+Release:        1%{?gitrel}%{?dist}
 Summary:        API and commands for processing SPIR-V modules
 
 License:        ASL 2.0
 URL:            https://github.com/KhronosGroup/SPIRV-Tools
-Source0:        %url/archive/sdk-%{sdkver}.tar.gz#/SPIRV-Tools-sdk-%{sdkver}.tar.gz
+Source0:        %url/archive/vulkan-sdk-%{sdkver}.tar.gz#/SPIRV-Tools-sdk-%{sdkver}.tar.gz
 
 Patch0: rhel8-workaround.patch
+Patch1: fix-gcc12-build.patch
 
-BuildRequires:  cmake
+BuildRequires:  cmake3
 BuildRequires:  gcc-c++
 BuildRequires:  ninja-build
 %if 0%{?rhel} == 7
@@ -42,22 +45,19 @@ Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 Development files for %{name}
 
 %prep
-%autosetup -p1 -n SPIRV-Tools-sdk-%{sdkver}
+%autosetup -p1 -n SPIRV-Tools-vulkan-sdk-%{sdkver}
 
 %build
-%__mkdir_p %_target_platform
-pushd %_target_platform
-%cmake -DCMAKE_BUILD_TYPE=Release \
+%cmake3 -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_LIBDIR=%{_lib} \
         -DSPIRV-Headers_SOURCE_DIR=%{_prefix} \
         -DPYTHON_EXECUTABLE=%{__python3} \
         -DSPIRV_TOOLS_BUILD_STATIC=OFF \
-        -GNinja ..
-%ninja_build
-popd
+        -GNinja
+%cmake3_build
 
 %install
-%ninja_install -C %_target_platform
+%cmake3_install
 
 %ldconfig_scriptlets libs
 
@@ -80,9 +80,9 @@ popd
 %{_libdir}/libSPIRV-Tools-link.so
 %{_libdir}/libSPIRV-Tools-lint.so
 %{_libdir}/libSPIRV-Tools-opt.so
-%{_libdir}/libSPIRV-Tools-shared.so
-%{_libdir}/libSPIRV-Tools-reduce.so
 %{_libdir}/libSPIRV-Tools.so
+%{_libdir}/libSPIRV-Tools-reduce.so
+%{_libdir}/libSPIRV-Tools-shared.so
 
 %files devel
 %{_includedir}/spirv-tools/
@@ -91,6 +91,10 @@ popd
 %{_libdir}/pkgconfig/SPIRV-Tools.pc
 
 %changelog
+* Tue Sep 10 2024 José Expósito <jexposit@redhat.com> - 1.3.283.0-1
+- Update to 1.3.283.0 SDK
+  Resolves: https://issues.redhat.com/browse/RHEL-54285
+
 * Wed Jul 12 2023 Dave Airlie <airlied@redhat.com> - 2023.1-3
 - Update to 1.3.250.1 SDK version
 
