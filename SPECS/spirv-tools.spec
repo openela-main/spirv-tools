@@ -1,15 +1,17 @@
 %undefine __cmake_in_source_build
 
-%global sdkver 1.3.268.0
+%global sdkver 1.3.283.0
 
 Name:           spirv-tools
-Version:        2023.3
+Version:        2024.2
 Release:        1%{?gitrel}%{?dist}
 Summary:        API and commands for processing SPIR-V modules
 
 License:        ASL 2.0
 URL:            https://github.com/KhronosGroup/SPIRV-Tools
 Source0:        %url/archive/vulkan-sdk-%{sdkver}.tar.gz#/SPIRV-Tools-sdk-%{sdkver}.tar.gz
+
+Patch0: fix-gcc12-build.patch
 
 BuildRequires:  cmake3
 BuildRequires:  gcc-c++
@@ -88,6 +90,9 @@ Development files for %{name}
 %{_libdir}/pkgconfig/SPIRV-Tools.pc
 
 %changelog
+* Tue May 28 2024 José Expósito <jexposit@redhat.com> - 2024.2-1
+- Update to 1.3.283.0 SDK
+
 * Wed Jan 17 2024 José Expósito <jexposit@redhat.com> - 2023.3-1
 - Update to 1.3.268.0 SDK
 
