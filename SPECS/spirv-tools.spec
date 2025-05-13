@@ -1,9 +1,9 @@
 %undefine __cmake_in_source_build
 
-%global sdkver 1.3.283.0
+%global sdkver 1.4.304.0
 
 Name:           spirv-tools
-Version:        2024.2
+Version:        2024.4
 Release:        1%{?gitrel}%{?dist}
 Summary:        API and commands for processing SPIR-V modules
 
@@ -75,6 +75,7 @@ Development files for %{name}
 %{_bindir}/spirv-val
 
 %files libs
+%license LICENSE
 %{_libdir}/libSPIRV-Tools-diff.so
 %{_libdir}/libSPIRV-Tools-link.so
 %{_libdir}/libSPIRV-Tools-lint.so
@@ -90,6 +91,9 @@ Development files for %{name}
 %{_libdir}/pkgconfig/SPIRV-Tools.pc
 
 %changelog
+* Mon Jan 20 2025 José Expósito <jexposit@redhat.com> - 2024.4-1
+- Update to 1.4.304.0 SDK
+
 * Tue May 28 2024 José Expósito <jexposit@redhat.com> - 2024.2-1
 - Update to 1.3.283.0 SDK
 
